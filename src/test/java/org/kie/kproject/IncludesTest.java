@@ -31,7 +31,7 @@ public class IncludesTest  extends BaseModelTest{
     }
 
     @Test
-    public void testChildKBase() {
+    public void testOnlyChild() {
         KieBase childKBase = createChildKBase();
 
         KieSession newChildKSession = childKBase.newKieSession();
@@ -47,7 +47,7 @@ public class IncludesTest  extends BaseModelTest{
     }
 
     @Test
-    public void testSuperKieBase() {
+    public void testOnlySuper() {
         KieBase superKieBase = createSuperKieBase();
 
         KieSession newSuperKieBase = superKieBase.newKieSession();
@@ -59,7 +59,7 @@ public class IncludesTest  extends BaseModelTest{
     }
 
     @Test
-    public void testInclude() {
+    public void testChildIncludingSuper() {
         KieBase kBase = thirdCase();
 
         KieSession newSuperKieBase = kBase.newKieSession();
