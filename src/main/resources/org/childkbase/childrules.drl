@@ -1,0 +1,11 @@
+
+package org.childkbase
+
+
+rule "Will remove a string"
+when
+	$s: String( this == "tobedeleted")
+then
+    System.out.println("Firing!");
+	delete($s);
+end
