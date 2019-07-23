@@ -24,7 +24,7 @@ public class IncludesTest  extends BaseModelTest{
 
     private final String SUPER_KBASE_NAME = "SuperKbase";
     private final String SUPER_KBASE_PACKAGE = "org.superkbase";
-    private final ReleaseIdImpl SUPER_RELEASE_ID = new ReleaseIdImpl(SUPER_KBASE_PACKAGE, "superkiebase", "1.0.0");
+    private final ReleaseIdImpl SUPER_RELEASE_ID = new ReleaseIdImpl(SUPER_KBASE_PACKAGE, "superkbase", "1.0.0");
 
     public IncludesTest(RUN_TYPE testRunType) {
         super(testRunType);
@@ -55,7 +55,19 @@ public class IncludesTest  extends BaseModelTest{
 
         int numberOfRulesFired = newSuperKieBase.fireAllRules();
         assertEquals(1, numberOfRulesFired);
-        assertEquals(2, newSuperKieBase.getObjects().size());
+        assertEquals(1, newSuperKieBase.getObjects().size());
+    }
+
+    @Test
+    public void testInclude() {
+        KieBase kBase = thirdCase();
+
+        KieSession newSuperKieBase = kBase.newKieSession();
+        newSuperKieBase.insert(10);
+
+        int numberOfRulesFired = newSuperKieBase.fireAllRules();
+        assertEquals(2, numberOfRulesFired);
+        assertEquals(0, newSuperKieBase.getObjects().size());
     }
 
     private KieBase createChildKBase() {
@@ -85,10 +97,40 @@ public class IncludesTest  extends BaseModelTest{
         kieFileSystem.writeKModuleXML(superKModule.toXML());
         kieFileSystem.generateAndWritePomXML(SUPER_RELEASE_ID);
 
-        InputStreamResource resource = new InputStreamResource(getClass().getClassLoader().getResourceAsStream("org/superkiebase/superrules.drl"));
-        kieFileSystem.write("src/main/resources/org/superkiebase/superrules.drl", resource);
+        InputStreamResource resource = new InputStreamResource(getClass().getClassLoader().getResourceAsStream("org/superkbase/superrules.drl"));
+        kieFileSystem.write("src/main/resources/org/superkbase/superrules.drl", resource);
         kieServices.newKieBuilder(kieFileSystem).buildAll(buildProjectClass());
         return kieServices.newKieContainer(SUPER_RELEASE_ID).getKieBase();
+    }
+
+    private KieBase thirdCase() {
+        KieServices kieServices = KieServices.Factory.get();
+        KieModuleModel kmodule = kieServices.newKieModuleModel();
+
+        KieBaseModel superKieBase = kmodule.newKieBaseModel(SUPER_KBASE_NAME);
+        superKieBase.addPackage(SUPER_KBASE_PACKAGE);
+
+        KieBaseModel childKbase = kmodule.newKieBaseModel(CHILD_KBASE_NAME)
+                .setDefault(true)
+                .addInclude(SUPER_KBASE_NAME);
+
+        childKbase.addPackage(CHILD_KBASE_PACKAGE);
+
+        KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
+
+        kieFileSystem.writeKModuleXML(kmodule.toXML());
+        kieFileSystem.generateAndWritePomXML(SUPER_RELEASE_ID);
+
+        InputStreamResource resource1 = new InputStreamResource(getClass().getClassLoader().getResourceAsStream("org/childkbase/childrules.drl"));
+        kieFileSystem.write("src/main/resources/org/childkbase/childrules.drl", resource1);
+
+        InputStreamResource resource2 = new InputStreamResource(getClass().getClassLoader().getResourceAsStream("org/superkbase/superrules.drl"));
+        kieFileSystem.write("src/main/resources/org/superkbase/superrules.drl", resource2);
+
+        kieServices.newKieBuilder(kieFileSystem).buildAll(buildProjectClass());
+
+
+        return kieServices.newKieContainer(SUPER_RELEASE_ID).getKieBase(CHILD_KBASE_NAME);
     }
 
     private Class<? extends KieBuilder.ProjectType> buildProjectClass() {

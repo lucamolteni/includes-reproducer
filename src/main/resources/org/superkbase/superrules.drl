@@ -6,4 +6,5 @@ when
 	$i: Integer()
 then
 	insert(String.valueOf($i));
+	delete($i);
 end
