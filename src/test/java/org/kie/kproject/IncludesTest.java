@@ -1,11 +1,13 @@
 package org.kie.kproject;
 
+import org.drools.compiler.kie.builder.impl.DrlProject;
 import org.drools.compiler.kproject.ReleaseIdImpl;
 import org.drools.core.io.impl.InputStreamResource;
 import org.drools.modelcompiler.ExecutableModelFlowProject;
 import org.junit.Test;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
+import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.model.KieBaseModel;
 import org.kie.api.builder.model.KieModuleModel;
@@ -14,7 +16,7 @@ import org.kie.api.runtime.rule.FactHandle;
 
 import static org.junit.Assert.*;
 
-public class IncludesTest {
+public class IncludesTest  extends BaseModelTest{
 
     private final String CHILD_KBASE_NAME = "ChildKBase";
     private final String CHILD_KBASE_PACKAGE = "org.childkbase";
@@ -24,6 +26,9 @@ public class IncludesTest {
     private final String SUPER_KBASE_PACKAGE = "org.superkbase";
     private final ReleaseIdImpl SUPER_RELEASE_ID = new ReleaseIdImpl(SUPER_KBASE_PACKAGE, "superkiebase", "1.0.0");
 
+    public IncludesTest(RUN_TYPE testRunType) {
+        super(testRunType);
+    }
 
     @Test
     public void testChildKBase() {
@@ -65,7 +70,7 @@ public class IncludesTest {
 
         InputStreamResource resource = new InputStreamResource(getClass().getClassLoader().getResourceAsStream("org/childkbase/childrules.drl"));
         kieFileSystem.write("src/main/resources/org/childkbase/childrules.drl", resource);
-        kieServices.newKieBuilder(kieFileSystem).buildAll(ExecutableModelFlowProject.class);
+        kieServices.newKieBuilder(kieFileSystem).buildAll(buildProjectClass());
         return kieServices.newKieContainer(CHILD_RELEASE_ID).getKieBase();
     }
 
@@ -82,7 +87,11 @@ public class IncludesTest {
 
         InputStreamResource resource = new InputStreamResource(getClass().getClassLoader().getResourceAsStream("org/superkiebase/superrules.drl"));
         kieFileSystem.write("src/main/resources/org/superkiebase/superrules.drl", resource);
-        kieServices.newKieBuilder(kieFileSystem).buildAll(ExecutableModelFlowProject.class);
+        kieServices.newKieBuilder(kieFileSystem).buildAll(buildProjectClass());
         return kieServices.newKieContainer(SUPER_RELEASE_ID).getKieBase();
+    }
+
+    private Class<? extends KieBuilder.ProjectType> buildProjectClass() {
+        return isExecutableModel() ? ExecutableModelFlowProject.class : DrlProject.class;
     }
 }
