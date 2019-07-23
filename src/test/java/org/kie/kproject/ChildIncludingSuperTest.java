@@ -1,12 +1,9 @@
 package org.kie.kproject;
 
-import org.drools.compiler.kie.builder.impl.DrlProject;
 import org.drools.core.io.impl.InputStreamResource;
-import org.drools.modelcompiler.ExecutableModelFlowProject;
 import org.junit.Test;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
-import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.model.KieBaseModel;
 import org.kie.api.builder.model.KieModuleModel;
