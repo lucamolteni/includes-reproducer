@@ -4,7 +4,7 @@ package org.childkbase
 
 rule "Will remove a string"
 when
-	$s: String( this == "tobedeleted")
+	$s: String( this == "10")
 then
     System.out.println("Firing!");
 	delete($s);

@@ -1,0 +1,9 @@
+package org.superkbase;
+
+
+rule "Will Convert a number to string"
+when
+	$i: Integer()
+then
+	insert(String.valueOf($i));
+end
