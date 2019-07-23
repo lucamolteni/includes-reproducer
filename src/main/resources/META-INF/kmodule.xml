@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule">
+    <kbase name="dmnTestKBase" packages="org.acme.test_generateModel_kjararchetype">
+        <ksession name="dmnTest.session" type="stateful" />
+    </kbase>
+</kmodule>
