@@ -11,7 +11,7 @@ import org.kie.api.runtime.KieSession;
 
 import static org.junit.Assert.*;
 
-public class ChildIncludingSuperTestSameKJar extends BaseModelTest{
+public class ChildIncludingSuperTestSameKJar extends BaseModelTest {
 
     public ChildIncludingSuperTestSameKJar(RUN_TYPE testRunType) {
         super(testRunType);
@@ -54,7 +54,6 @@ public class ChildIncludingSuperTestSameKJar extends BaseModelTest{
         kieFileSystem.write("src/main/resources/org/superkbase/superrules.drl", resource2);
 
         kieServices.newKieBuilder(kieFileSystem).buildAll(buildProjectClass());
-
 
         return kieServices.newKieContainer(SUPER_RELEASE_ID).getKieBase(CHILD_KBASE_NAME);
     }
