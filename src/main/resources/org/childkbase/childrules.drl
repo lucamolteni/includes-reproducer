@@ -1,10 +1,11 @@
 
 package org.childkbase
 
+import org.superkbase.MyType;
 
 rule "Will remove a string"
 when
-	$s: String( this == "10")
+	$s: MyType( value == "10")
 then
     System.out.println("Firing!");
 	delete($s);

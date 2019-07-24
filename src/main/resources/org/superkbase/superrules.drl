@@ -1,10 +1,13 @@
 package org.superkbase;
 
+declare MyType
+    value: java.lang.String
+end
 
 rule "Will Convert a number to string"
 when
 	$i: Integer()
 then
-	insert(String.valueOf($i));
+	insert(new MyType(String.valueOf($i)));
 	delete($i);
 end
