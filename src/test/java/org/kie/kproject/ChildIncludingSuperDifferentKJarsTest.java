@@ -13,9 +13,9 @@ import org.kie.api.runtime.KieSession;
 
 import static org.junit.Assert.*;
 
-public class ChildIncludingSuperTestDifferentKJars extends BaseModelTest {
+public class ChildIncludingSuperDifferentKJarsTest extends BaseModelTest {
 
-    public ChildIncludingSuperTestDifferentKJars(RUN_TYPE testRunType) {
+    public ChildIncludingSuperDifferentKJarsTest(RUN_TYPE testRunType) {
         super(testRunType);
     }
 
